@@ -1,0 +1,11 @@
+Priya Kumar
+Junior Analyst
+
+Skills: Python, SQL, Excel, basic Matplotlib, Tableau
+
+Experience:
+- Performed data cleaning and analysis using Python and pandas
+- Created reports and visualizations in Tableau
+- Wrote SQL queries for monthly reporting
+
+Education: B.Sc Statistics

@@ -1,0 +1,25 @@
+Job Title: Junior Data Scientist
+
+We are looking for a Junior Data Scientist to join our analytics team.
+
+Responsibilities:
+- Build and evaluate machine learning models (classification, regression)
+- Write clean, efficient Python code for data analysis
+- Work with SQL databases to extract and transform data
+- Create dashboards and visualizations to communicate insights
+- Collaborate with cross-functional teams on data-driven projects
+
+Required Skills:
+- Strong proficiency in Python (pandas, numpy, scikit-learn)
+- Experience with SQL for querying relational databases
+- Understanding of machine learning algorithms (Random Forest, regression, etc.)
+- Experience with data visualization tools (Power BI, Tableau, or Matplotlib)
+- Familiarity with version control (Git)
+
+Nice to Have:
+- Experience with deep learning frameworks (TensorFlow, PyTorch)
+- Exposure to NLP or LLM-based applications
+- Experience deploying models or building end-to-end pipelines
+- Knowledge of cloud platforms (AWS, Azure, GCP)
+
+Education: Bachelor's degree in Computer Science, Data Science, or related field

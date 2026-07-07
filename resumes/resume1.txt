@@ -1,0 +1,13 @@
+Jane Doe
+Data Scientist
+
+Skills: Python, pandas, numpy, scikit-learn, SQL, Power BI, Git, Random Forest,
+regression models, TensorFlow basics
+
+Experience:
+- Built a Random Forest model on 900K+ records achieving R² of 0.96
+- Created Power BI dashboards for business stakeholders
+- Wrote SQL queries to extract and clean data from PostgreSQL databases
+- Used Git for version control across team projects
+
+Education: B.E. Computer Science - Data Science

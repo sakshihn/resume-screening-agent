@@ -1,0 +1,60 @@
+[
+  {
+    "candidate": "resume1.txt",
+    "score": 43.32,
+    "matched_skills": [
+      "Python",
+      "pandas",
+      "numpy",
+      "scikit-learn",
+      "SQL",
+      "Power BI",
+      "Git",
+      "Random Forest",
+      "regression models"
+    ],
+    "missing_skills": [
+      "experience with deep learning frameworks beyond basics",
+      "NLP or LLM-based applications",
+      "cloud platforms",
+      "experience deploying models or building end-to-end pipelines",
+      "Tableau",
+      "Matplotlib"
+    ],
+    "reasoning": "Jane Doe's resume matches most of the required skills for the Junior Data Scientist position, including proficiency in Python, SQL, and data visualization tools. Her experience with machine learning models and version control is also a good fit. However, she lacks experience with some of the nice-to-have skills, such as deep learning frameworks beyond basics and cloud platforms."
+  },
+  {
+    "candidate": "resume3.txt",
+    "score": 23.19,
+    "matched_skills": [
+      "Python",
+      "SQL",
+      "Tableau",
+      "Matplotlib"
+    ],
+    "missing_skills": [
+      "numpy",
+      "scikit-learn",
+      "Git",
+      "machine learning algorithms"
+    ],
+    "reasoning": "Priya has some relevant skills such as Python, SQL, and data visualization tools, but lacks specific machine learning skills and experience with version control. Her background in statistics and experience with data analysis and visualization are a good foundation, but she may need to develop additional skills to meet the required skills for the Junior Data Scientist role."
+  },
+  {
+    "candidate": "resume2.txt",
+    "score": 6.82,
+    "matched_skills": [],
+    "missing_skills": [
+      "Python",
+      "pandas",
+      "numpy",
+      "scikit-learn",
+      "SQL",
+      "machine learning algorithms",
+      "data visualization tools",
+      "Git",
+      "data science"
+    ],
+    "reasoning": "The candidate's resume does not demonstrate any relevant skills for the Junior Data Scientist position, as their experience is focused on Java and software engineering rather than data science and machine learning. The candidate lacks essential skills such as Python, SQL, and data visualization tools. The candidate's education in Computer Science is a positive, but their experience and skills do not align with the job requirements."
+  }
+]

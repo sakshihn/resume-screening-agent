@@ -1,0 +1,11 @@
+John Smith
+Software Engineer
+
+Skills: Java, Spring Boot, MySQL, REST APIs, Docker
+
+Experience:
+- Built backend services using Java and Spring Boot
+- Managed MySQL databases for enterprise applications
+- Deployed services using Docker containers
+
+Education: B.Tech Computer Science
