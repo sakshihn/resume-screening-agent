@@ -4,10 +4,13 @@ An AI agent that ranks candidate resumes against a job description, combining
 math-based similarity scoring with LLM-generated reasoning — built for the
 Rooman AI Challenge (24-Hour AI Agent Challenge).
 
+Originally a command-line script, now a Flask web app: paste a job
+description, drag in resumes, and get a ranked shortlist in the browser.
+
 ## What it does
 
-Takes a job description and a folder of resumes, and produces a ranked
-shortlist. Each candidate gets:
+Takes a job description and a set of resumes (uploaded via the web UI), and
+produces a ranked shortlist. Each candidate gets:
 - A **similarity score** (0–100%), computed mathematically via TF-IDF + cosine similarity
 - **Matched skills** and **missing skills**, identified by an LLM
 - A short **reasoning summary** explaining the fit
@@ -19,7 +22,7 @@ The score and the reasoning come from two separate sources on purpose — see
 
 ### 1. Install dependencies
 ```bash
-pip install groq python-dotenv pdfplumber python-docx scikit-learn
+pip install -r requirements.txt
 ```
 
 ### 2. Get a free Groq API key
@@ -33,22 +36,23 @@ Create a file named `.env` in the project root:
 GROQ_API_KEY=your_key_here
 ```
 
-### 4. Add your data
-- Place your job description in `jd.txt`
-- Place resumes (`.txt`, `.pdf`, or `.docx`) inside the `resumes/` folder
-
 ## Running it
 
 ```bash
-python agent.py
+python app.py
 ```
 
-This will:
-1. Read the job description and every resume in `resumes/`
-2. Score each resume against the JD
-3. Ask the LLM to identify matched/missing skills and explain the fit
-4. Print a ranked shortlist to the terminal
-5. Save full results to `ranked_output.json`
+Then open **http://localhost:5000** in your browser.
+
+From there:
+1. Paste the job description into the text box
+2. Drag and drop up to 10 resumes (PDF or DOCX)
+3. Click **Screen Resumes**
+
+The app extracts text from each resume, scores it against the JD, asks the
+LLM to identify matched/missing skills and explain the fit, and displays a
+ranked list of candidates directly in the browser — no terminal or JSON file
+needed to view results.
 
 ## Design Approach
 
@@ -84,30 +88,31 @@ independently verify.
 - **Single JD at a time** — the agent doesn't yet support screening the same
   resume pool against multiple job openings in one run.
 - **With more time**, I'd add: semantic embedding-based scoring as a second
-  signal alongside TF-IDF, a simple web UI for non-technical recruiters, and
-  batch caching so re-running on the same resumes doesn't re-call the LLM.
+  signal alongside TF-IDF, batch caching so re-running on the same resumes
+  doesn't re-call the LLM, and deployment to a public URL for easier demoing.
 
 ## Sample Output
 
-See `ranked_output.json` for the full structured output across all sample
-resumes, and the terminal output below for a quick view:
+Each screened candidate is displayed as a ranked card in the UI, showing:
 
 ```
-1. resume1.txt — 43.32%
-   Matched: ['Python', 'pandas', 'numpy', 'scikit-learn', 'SQL', ...]
-   Missing: ['deploying models', 'cloud platforms', ...]
+1. Jane Doe — 87%
+   Matched: Python, pandas, numpy, scikit-learn, SQL, ...
+   Missing: deploying models, cloud platforms, ...
    Why: Jane Doe's resume matches most of the required skills...
-
-2. resume3.txt — 23.19%
-   ...
 ```
 
 ## Project Files
 
 | File | Purpose |
 |---|---|
-| `agent.py` | Main script — extraction, scoring, LLM reasoning, ranking |
-| `jd.txt` | Sample job description |
-| `resumes/` | Sample resumes (10 candidates, varied fit levels) |
-| `ranked_output.json` | Output from the last run |
+| `app.py` | Flask app — routes, `/screen` endpoint, extraction, scoring, LLM reasoning |
+| `templates/index.html` | Web UI — job description input, resume upload, results display |
+| `requirements.txt` | Python dependencies |
 | `.env` | Your Groq API key (not committed to Git) |
+
+## Previous Version
+
+The original CLI implementation (reading from a `jd.txt` file and a
+`resumes/` folder, printing results to the terminal and `ranked_output.json`)
+is preserved in Git history and can be found in earlier commits.
