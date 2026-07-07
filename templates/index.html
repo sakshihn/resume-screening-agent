@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Resume Screening Agent</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #182B3A;
+    --ink-deep: #101E29;
+    --paper: #F6F1E7;
+    --paper-dark: #ECE4D2;
+    --stamp-red: #B23A2E;
+    --stamp-green: #3F6E4E;
+    --rule: #C9BEA3;
+    --muted: #6B6355;
+  }
+  * { box-sizing: border-box; }
+  body {
+    max-width: 860px; margin: 0 auto; padding: 50px 24px 80px;
+    background: var(--ink);
+    background-image:
+      radial-gradient(circle at 20% 10%, rgba(255,255,255,0.03), transparent 40%),
+      radial-gradient(circle at 80% 90%, rgba(255,255,255,0.03), transparent 40%);
+    color: var(--ink);
+    font-family: 'IBM Plex Sans', sans-serif;
+  }
+
+  .eyebrow {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase;
+    color: #8FA5B8; margin-bottom: 6px;
+  }
+  h1 {
+    font-family: 'Fraunces', serif; font-weight: 700; font-optical-sizing: auto;
+    color: var(--paper); font-size: 40px; margin: 0 0 4px; letter-spacing: -0.01em;
+  }
+  .subtitle {
+    color: #9CAEBD; font-size: 15px; margin: 0 0 30px; max-width: 520px;
+  }
+
+  .folder {
+    background: var(--paper);
+    border-radius: 3px 14px 14px 14px;
+    box-shadow: 0 24px 48px -12px rgba(0,0,0,0.5), 0 2px 0 rgba(0,0,0,0.1);
+    position: relative;
+    padding: 34px 34px 28px;
+    margin-bottom: 26px;
+  }
+  .folder::before {
+    content: "";
+    position: absolute; top: -18px; left: 0;
+    width: 150px; height: 18px;
+    background: var(--paper);
+    border-radius: 8px 8px 0 0;
+  }
+  .folder-tab-label {
+    position: absolute; top: -14px; left: 16px;
+    font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.1em;
+    color: var(--muted); text-transform: uppercase;
+  }
+
+  label.field-label {
+    font-family: 'IBM Plex Mono', monospace; font-weight: 500; font-size: 12px;
+    color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em;
+    display: block; margin-bottom: 8px;
+  }
+
+  textarea {
+    width: 100%; height: 130px; padding: 14px; font-size: 14px;
+    font-family: 'IBM Plex Sans', sans-serif;
+    border: 1px solid var(--rule); border-radius: 4px;
+    background: #FBF8F0; color: var(--ink); resize: vertical;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  textarea:focus { outline: none; border-color: var(--ink); box-shadow: 0 0 0 3px rgba(24,43,58,0.08); }
+  textarea::placeholder { color: #A79E8A; }
+
+  .divider { border: none; border-top: 1px dashed var(--rule); margin: 26px 0; }
+
+  .dropzone {
+    border: 1.5px dashed var(--rule); border-radius: 4px;
+    padding: 24px; text-align: center; cursor: pointer;
+    background: #FBF8F0; transition: all 0.15s;
+  }
+  .dropzone:hover, .dropzone.dragover { border-color: var(--ink); background: var(--paper-dark); }
+  .dropzone input { display: none; }
+  .dropzone-text { font-size: 14px; color: var(--muted); }
+  .dropzone-text b { color: var(--ink); }
+  .filelist { margin-top: 12px; display: flex; flex-wrap: wrap; gap: 6px; }
+  .filelist span {
+    font-family: 'IBM Plex Mono', monospace; font-size: 12px;
+    background: var(--ink); color: var(--paper);
+    padding: 4px 10px; border-radius: 3px;
+  }
+
+  .submit-row { display: flex; align-items: center; gap: 16px; margin-top: 24px; }
+  button#submitBtn {
+    background: var(--ink); color: var(--paper); border: none;
+    padding: 14px 30px; font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase;
+    border-radius: 3px; cursor: pointer; transition: background 0.15s, transform 0.1s;
+  }
+  button#submitBtn:hover:not(:disabled) { background: var(--ink-deep); }
+  button#submitBtn:active:not(:disabled) { transform: scale(0.98); }
+  button#submitBtn:disabled { background: #A6A6A0; cursor: not-allowed; }
+
+  #status { font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: #9CAEBD; }
+  #error { font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: #E8998D; font-weight: 500; margin-top: 6px; }
+
+  #results { display: flex; flex-direction: column; gap: 18px; }
+
+  .candidate {
+    background: var(--paper); border-radius: 4px 12px 12px 4px;
+    padding: 24px 28px; position: relative; overflow: hidden;
+    box-shadow: 0 12px 28px -10px rgba(0,0,0,0.45);
+    animation: slideIn 0.35s ease-out both;
+  }
+  @keyframes slideIn { from { opacity: 0; transform: translateX(-8px); } to { opacity: 1; transform: translateX(0); } }
+
+  .candidate::before {
+    content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 5px;
+    background: var(--rank-color, var(--ink));
+  }
+
+  .candidate-head {
+    display: flex; justify-content: space-between; align-items: flex-start; gap: 16px;
+    margin-bottom: 14px;
+  }
+  .rank-name {
+    font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--muted);
+    letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 4px;
+  }
+  .candidate-name {
+    font-family: 'Fraunces', serif; font-weight: 600; font-size: 22px; color: var(--ink);
+  }
+
+  .stamp {
+    font-family: 'IBM Plex Mono', monospace; font-weight: 600; font-size: 22px;
+    border: 3px double var(--stamp-color, var(--stamp-green));
+    color: var(--stamp-color, var(--stamp-green));
+    padding: 6px 14px; border-radius: 6px;
+    transform: rotate(-4deg); white-space: nowrap;
+    letter-spacing: 0.02em; flex-shrink: 0;
+  }
+
+  .skills-row { margin: 14px 0; }
+  .skills-label { font-family: 'IBM Plex Mono', monospace; font-size: 11px; text-transform: uppercase;
+    letter-spacing: 0.08em; color: var(--muted); margin-bottom: 6px; }
+  .badges { display: flex; flex-wrap: wrap; gap: 6px; }
+  .badge {
+    font-family: 'IBM Plex Mono', monospace; font-size: 12px; padding: 3px 9px;
+    border-radius: 3px; border: 1px solid;
+  }
+  .badge.match { background: #EAF1EC; color: var(--stamp-green); border-color: #C4DBC9; }
+  .badge.missing { background: #F6E9E7; color: var(--stamp-red); border-color: #E4C3BC; }
+  .none-text { font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #A79E8A; }
+
+  .reasoning {
+    font-family: 'Fraunces', serif; font-style: italic; font-size: 15px;
+    color: #3D4A54; margin: 16px 0 0; padding-top: 14px;
+    border-top: 1px dashed var(--rule); line-height: 1.55;
+  }
+</style>
+</head>
+<body>
+
+<div class="eyebrow">Screening Desk — Case Intake</div>
+<h1>Resume Screening Agent</h1>
+<p class="subtitle">Paste the job description and drop in up to 10 resumes. Each candidate gets read, scored, and filed below.</p>
+
+<div class="folder">
+  <div class="folder-tab-label">Job Description</div>
+  <label class="field-label">Paste the posting</label>
+  <textarea id="jdText" placeholder="Paste the job description here..."></textarea>
+
+  <hr class="divider">
+
+  <label class="field-label">Resumes — max 10, PDF or DOCX</label>
+  <div class="dropzone" id="dropzone">
+    <div class="dropzone-text" id="dropzoneText">Click to browse or drag files here</div>
+    <input type="file" id="resumeFiles" multiple accept=".pdf,.docx">
+  </div>
+  <div class="filelist" id="filelist"></div>
+
+  <div class="submit-row">
+    <button id="submitBtn" onclick="screenResumes()">Screen Resumes</button>
+    <div id="status"></div>
+  </div>
+  <div id="error"></div>
+</div>
+
+<div id="results"></div>
+
+<script>
+const dropzone = document.getElementById("dropzone");
+const fileInput = document.getElementById("resumeFiles");
+const filelist = document.getElementById("filelist");
+
+dropzone.addEventListener("click", () => fileInput.click());
+dropzone.addEventListener("dragover", e => { e.preventDefault(); dropzone.classList.add("dragover"); });
+dropzone.addEventListener("dragleave", () => dropzone.classList.remove("dragover"));
+dropzone.addEventListener("drop", e => {
+  e.preventDefault();
+  dropzone.classList.remove("dragover");
+  fileInput.files = e.dataTransfer.files;
+  updateFileList();
+});
+fileInput.addEventListener("change", updateFileList);
+
+function updateFileList() {
+  const files = fileInput.files;
+  filelist.innerHTML = "";
+  document.getElementById("dropzoneText").innerHTML = files.length
+    ? `<b>${files.length} file(s) selected</b> — click to change`
+    : "Click to browse or drag files here";
+  for (const f of files) {
+    const span = document.createElement("span");
+    span.textContent = f.name;
+    filelist.appendChild(span);
+  }
+}
+
+function scoreColor(score) {
+  if (score >= 75) return "#3F6E4E";
+  if (score >= 50) return "#A8791A";
+  return "#B23A2E";
+}
+
+async function screenResumes() {
+  const jdText = document.getElementById("jdText").value;
+  const files = fileInput.files;
+  const btn = document.getElementById("submitBtn");
+  const statusEl = document.getElementById("status");
+  const errorEl = document.getElementById("error");
+  const resultsEl = document.getElementById("results");
+
+  errorEl.textContent = "";
+  resultsEl.innerHTML = "";
+
+  if (!jdText.trim()) {
+    errorEl.textContent = "Please paste a job description.";
+    return;
+  }
+  if (files.length === 0) {
+    errorEl.textContent = "Please upload at least one resume.";
+    return;
+  }
+  if (files.length > 10) {
+    errorEl.textContent = "Maximum 10 resumes allowed.";
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append("jd_text", jdText);
+  for (const file of files) {
+    formData.append("resumes", file);
+  }
+
+  btn.disabled = true;
+  statusEl.textContent = `Screening ${files.length} resume(s)... this may take a moment.`;
+
+  try {
+    const response = await fetch("/screen", { method: "POST", body: formData });
+    const data = await response.json();
+
+    if (data.error) {
+      errorEl.textContent = data.error;
+    } else {
+      statusEl.textContent = `Done — ${data.results.length} resume(s) filed.`;
+      data.results.forEach((r, i) => {
+        const div = document.createElement("div");
+        div.className = "candidate";
+        const color = scoreColor(r.score);
+        div.style.setProperty("--rank-color", color);
+        div.style.setProperty("--stamp-color", color);
+
+        const matched = r.matched_skills.length
+          ? r.matched_skills.map(s => `<span class="badge match">${s}</span>`).join("")
+          : `<span class="none-text">none found</span>`;
+        const missing = r.missing_skills.length
+          ? r.missing_skills.map(s => `<span class="badge missing">${s}</span>`).join("")
+          : `<span class="none-text">none</span>`;
+
+        div.innerHTML = `
+          <div class="candidate-head">
+            <div>
+              <div class="rank-name">File ${String(i + 1).padStart(2, '0')}</div>
+              <div class="candidate-name">${r.candidate}</div>
+            </div>
+            <div class="stamp">${r.score}%</div>
+          </div>
+          <div class="skills-row">
+            <div class="skills-label">Matched</div>
+            <div class="badges">${matched}</div>
+          </div>
+          <div class="skills-row">
+            <div class="skills-label">Missing</div>
+            <div class="badges">${missing}</div>
+          </div>
+          <p class="reasoning">${r.reasoning}</p>
+        `;
+        resultsEl.appendChild(div);
+      });
+    }
+  } catch (err) {
+    errorEl.textContent = "Something went wrong: " + err.message;
+  } finally {
+    btn.disabled = false;
+  }
+}
+</script>
+
+</body>
+</html>
